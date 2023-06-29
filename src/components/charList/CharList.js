@@ -8,28 +8,20 @@ import './charList.scss';
 const CharList = (props) =>  {
 
     const [charList, setCharList] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
     const [newItemsLoading, setNewItemsLoading] = useState(false);
     const [offset, setOffset] = useState(210);
     const [endCharList, setEndCharList] = useState(false);
 
-    const marvel = useMarvelService();
+    const {loading, error, getAllCharacters} = useMarvelService();
 
     useEffect( () => {
-        onRequest();
+        onRequest(offset, true);
     },[]);
 
-    const onRequest = (offset) => {
-        onCharsLoading();
-        marvel
-        .getAllCharacters(offset)
+    const onRequest = (offset, initial) => {
+		initial ? setNewItemsLoading(false) : setNewItemsLoading(true)
+   	getAllCharacters(offset)
         .then(onCharsLoaded)
-        .catch(onError)
-    }
-
-    const onCharsLoading = () => {
-        setNewItemsLoading(true)
     }
 
     const onCharsLoaded = (newCharList) => {
@@ -38,17 +30,11 @@ const CharList = (props) =>  {
             ended = true;
         }
         setCharList( charList => [...charList, ...newCharList]);
-        setLoading(loading => false);
         setNewItemsLoading(newItemsLoading => false);
         setOffset(offset => offset + 9);
         setEndCharList(ended);
     }
 
-    const onError = () => {
-        setCharList({});
-        setLoading(loading => false);
-        setError(true);
-       }
 
     const itemRefs = useRef([]);
 
@@ -94,15 +80,15 @@ const CharList = (props) =>  {
 
     const items  = renderChar(charList);
 
-    const  load = loading ? <Spinner/> : null;
+    const  load = loading && !newItemsLoading ? <Spinner/> : null;
     const  errorMessage  = error ? <ErorrMessage/> : null;
-    const  content = !(load || error) ? items : null;
+
 
     return (
         <div className="char__list">
             {load}
             {errorMessage }
-            {content}
+           	{items}
 
             <button className="button button__main button__long"
                     disabled = {newItemsLoading}

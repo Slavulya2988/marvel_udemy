@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Spinner from '../spinner/Spinner';
 import ErorrMessage from '../errorMessage/ErorrMessage';
 import Skeleton from '../skeleton/Skeleton';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 import './charInfo.scss';
 
@@ -11,10 +11,7 @@ import './charInfo.scss';
 const CharInfo = (props) => {
 
     const [char, setChar] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
-
-    const marvel = new MarvelService();
+    const {loading, error, getCharacter, clearError} = useMarvelService();
 
     useEffect(() => {
         updateChar();
@@ -22,29 +19,15 @@ const CharInfo = (props) => {
 
     const onCharLoaded = (char) => {
         setChar(char);
-        setLoading(false);
-        }
-
-    const onCharLoading = () => {
-        setLoading(true);
-       }
-
-    const onError = () => {
-        setChar({});
-        setLoading(loading => false);
-        setError(true);
-       }
+      }
 
     const updateChar = () => {
         if(!props.charId){
             return;
         }
-
-        onCharLoading();
-
-        marvel.getCharacter(props.charId)
+		  clearError();
+		getCharacter(props.charId)
               .then(onCharLoaded)
-              .catch(onError)
     }
     const skeleton = (char || loading || error)  ? null : <Skeleton/>
     const load = loading ? <Spinner/> : null;
