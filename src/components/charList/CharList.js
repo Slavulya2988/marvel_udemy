@@ -4,7 +4,6 @@ import ErorrMessage from '../errorMessage/ErorrMessage';
 import useMarvelService from '../../services/MarvelService';
 import './charList.scss';
 
-
 const CharList = (props) =>  {
 
     const [charList, setCharList] = useState([]);
@@ -20,7 +19,7 @@ const CharList = (props) =>  {
 
     const onRequest = (offset, initial) => {
 		initial ? setNewItemsLoading(false) : setNewItemsLoading(true)
-   	getAllCharacters(offset)
+   	    getAllCharacters(offset)
         .then(onCharsLoaded)
     }
 

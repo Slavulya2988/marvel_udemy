@@ -1,7 +1,19 @@
+import { useState, useEffect } from 'react';
+import Spinner from '../spinner/Spinner';
+import ErorrMessage from '../errorMessage/ErorrMessage';
+import useMarvelService from '../../services/MarvelService';
+
 import './singleComic.scss';
 import xMen from '../../resources/img/x-men.png';
 
 const SingleComic = () => {
+    const {getComics} = useMarvelService();
+
+
+    useEffect( () => {
+        getComics(106453);
+    },[]);
+
     return (
         <div className="single-comic">
             <img src={xMen} alt="x-men" className="single-comic__img"/>
