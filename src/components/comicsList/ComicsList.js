@@ -8,10 +8,10 @@ import './comicsList.scss';
 
 const ComicsList = () => {
 
-    const [charList, setCharList] = useState([]);
+    const [comicsList, setComicsList] = useState([]);
     const [newItemsLoading, setNewItemsLoading] = useState(false);
-    const [offset, setOffset] = useState(210);
-    const [endCharList, setEndCharList] = useState(false);
+    const [offset, setOffset] = useState(0);
+    const [endComicsList, setEndcomicsList] = useState(false);
 
     const {loading, error, getAllComics} = useMarvelService();
 
@@ -22,19 +22,19 @@ const ComicsList = () => {
     const onRequest = (offset, initial) => {
         initial ? setNewItemsLoading(false) : setNewItemsLoading(true)
         getAllComics(offset)
-        .then(onCharsLoaded)
+        .then(onComicsLoaded)
     }
 
-    const onCharsLoaded = (newCharList) => {
+    const onComicsLoaded = (newComicsList) => {
         let ended = false;
-        if( newCharList.length < 8 ){
+        if( newComicsList.length < 8 ){
             ended = true;
         }
 
-        setCharList( charList => [...charList, ...newCharList]);
-        setNewItemsLoading(newItemsLoading => false);
-        setOffset(offset => offset + 8);
-        setEndCharList(ended);
+        setComicsList( [...comicsList, ...newComicsList]);
+        setNewItemsLoading(false);
+        setOffset( offset + 8);
+        setEndcomicsList(ended);
     }
 
     function renderComics (arr) {
@@ -42,7 +42,7 @@ const ComicsList = () => {
 
             return(
                 <li className="comics__item"
-                    key={item.id}>
+                    key={i}>
                 <a href="#">
                     <img src={item.thumbnail}
                          alt={item.title}
@@ -61,7 +61,7 @@ const ComicsList = () => {
         )
     }
 
-    const items  = renderComics(charList);
+    const items  = renderComics(comicsList);
 
     const  load = loading && !newItemsLoading ? <Spinner/> : null;
     const  errorMessage  = error ? <ErorrMessage/> : null;
@@ -75,7 +75,7 @@ const ComicsList = () => {
 
             <button className="button button__main button__long"
                     disabled = {newItemsLoading}
-                    style = {{'display' : endCharList ? 'none' : 'block' }}
+                    style = {{'display' : endComicsList ? 'none' : 'block' }}
                     onClick = {() => onRequest(offset)}
                     >
                 <div className="inner">load more</div>
