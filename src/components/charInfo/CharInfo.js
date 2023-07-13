@@ -6,6 +6,7 @@ import Skeleton from '../skeleton/Skeleton';
 import useMarvelService from '../../services/MarvelService';
 
 import './charInfo.scss';
+import { Link } from 'react-router-dom';
 
 
 const CharInfo = (props) => {
@@ -72,16 +73,19 @@ const View = ({char}) => {
             <div className="char__comics">Comics:</div>
             <ul className="char__comics-list">
                 {comics.length === 0 ? 'Комікси відсутні' : null}
-                {comics.map((item, i) => {
-                    if (i < 10) {
+
+                {comics.slice(0,10).map((item, i) => {
+                   //console.log( item["resourceURI"].replace(/[\D]/g, ''));
                     return (
                             <li key={i} className="char__comics-item">
-                                {item.name }
+                               <Link to={`/comics/${item.resourceURI.substring(43)}`}>
+                                    {item.name}
+                               </Link>
                             </li>
                             )
-                        }
                     })
                 }
+
 
             </ul>
         </>
