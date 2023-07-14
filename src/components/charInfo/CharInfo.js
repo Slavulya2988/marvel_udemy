@@ -75,18 +75,16 @@ const View = ({char}) => {
                 {comics.length === 0 ? 'Комікси відсутні' : null}
 
                 {comics.slice(0,10).map((item, i) => {
-                   //console.log( item["resourceURI"].replace(/[\D]/g, ''));
+                    const comicId = item.resourceURI.match(/(\d{3,5})/gi).join('');
                     return (
                             <li key={i} className="char__comics-item">
-                               <Link to={`/comics/${item.resourceURI.substring(43)}`}>
+                               <Link to={`/comics/${comicId}`}>
                                     {item.name}
                                </Link>
                             </li>
                             )
                     })
                 }
-
-
             </ul>
         </>
     )

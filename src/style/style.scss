@@ -32,7 +32,7 @@ a {
     display: inline-block;
     &:hover {
         text-decoration: none;
-        color: inherit;
+        color: #9f0013;
     }
 }
 
@@ -44,7 +44,7 @@ p {
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
-    margin: 0; 
+    margin: 0;
 }
 
 .app {
