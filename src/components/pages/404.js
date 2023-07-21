@@ -1,4 +1,4 @@
-import ErorrMessage from '../errorMessage/ErorrMessage';
+import ErorrMessage from '../errorMessage/ErrorMessage';
 import {Link} from 'react-router-dom';
 
 const Page404 = () => {

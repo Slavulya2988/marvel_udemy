@@ -1,50 +1,12 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import Spinner from '../../spinner/Spinner';
-import ErorrMessage from '../../errorMessage/ErorrMessage';
-import useMarvelService from '../../../services/MarvelService';
+import { Link } from 'react-router-dom';
 
 import './singleComic.scss';
 
+const SingleComic = ({data}) => {
 
-const SingleComic = () => {
-
-    const {comicId} = useParams();
-
-    //console.log({comicId});
-   const [comic, setComic] = useState(null);
-    const {loading, error, getComic, clearError} = useMarvelService();
-
-    useEffect(() => {
-        updateComic();
-    }, [comicId])
-
-    const updateComic = () => {
-        clearError();
-		getComic(comicId)
-            .then(onComicLoaded)
-    }
-
-    const onComicLoaded = (comic) => {
-        setComic(comic);
-    }
-
-
-    const errorMessage  = error ? <ErorrMessage/> : null;
-    const load = loading ? <Spinner/> : null;
-    const content = !(load || error || !comic) ? <View comic = {comic}/> : null;
+    const {title, description, pageCount, thumbnail, language, price} = data;
 
     return (
-        <>
-            {load}
-            {errorMessage}
-            {content}
-        </>
-    )
-}
-const View = ({comic}) => {
-    const {title, description, pageCount, thumbnail, language, price} = comic;
-    return(
         <div className="single-comic">
             <img src={thumbnail} alt={title} className="single-comic__img"/>
             <div className="single-comic__info">
@@ -54,7 +16,7 @@ const View = ({comic}) => {
                 <p className="single-comic__descr">Language: {language}</p>
                 <div className="single-comic__price">{price}</div>
             </div>
-            <Link to='/comics' className="single-comic__back">Back to all</Link>
+            <Link to="/comics" className="single-comic__back">Back to all</Link>
         </div>
     )
 }

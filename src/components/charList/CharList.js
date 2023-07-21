@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
-import Spinner from '../spinner/Spinner';
-import ErorrMessage from '../errorMessage/ErorrMessage';
+import { useState, useEffect, useRef, useMemo } from 'react';
+
 import useMarvelService from '../../services/MarvelService';
+import setContentWithLoad from '../../utils/setContentWithLoad';
+
 import './charList.scss';
 
 const CharList = (props) =>  {
@@ -11,16 +12,18 @@ const CharList = (props) =>  {
     const [offset, setOffset] = useState(210);
     const [endCharList, setEndCharList] = useState(false);
 
-    const {loading, error, getAllCharacters} = useMarvelService();
+    const {getAllCharacters, process, setProcess} = useMarvelService();
 
     useEffect( () => {
         onRequest(offset, true);
+        // eslint-disable-next-line
     },[]);
 
     const onRequest = (offset, initial) => {
 		initial ? setNewItemsLoading(false) : setNewItemsLoading(true)
    	    getAllCharacters(offset)
         .then(onCharsLoaded)
+        .then(() => setProcess('confirmed'))
     }
 
     const onCharsLoaded = (newCharList) => {
@@ -28,7 +31,7 @@ const CharList = (props) =>  {
         if( newCharList.length < 9 ){
             ended = true;
         }
-        setCharList( charList => [...charList, ...newCharList]);
+        setCharList([...charList, ...newCharList]);
         setNewItemsLoading(newItemsLoading => false);
         setOffset(offset => offset + 9);
         setEndCharList(ended);
@@ -78,23 +81,19 @@ const CharList = (props) =>  {
         )
     }
 
-    const items  = renderChar(charList);
-
-    const  load = loading && !newItemsLoading ? <Spinner/> : null;
-    const  errorMessage  = error ? <ErorrMessage/> : null;
-
+    const element = useMemo(() => {
+        return setContentWithLoad(process, () => renderChar(charList), newItemsLoading)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [process]);
 
     return (
         <div className="char__list">
-            {load}
-            {errorMessage }
-           	{items}
+           {element}
 
             <button className="button button__main button__long"
                     disabled = {newItemsLoading}
                     style = {{'display' : endCharList ? 'none' : 'block' }}
-                    onClick = {() => onRequest(offset)}
-                    >
+                    onClick = {() => onRequest(offset)}>
                 <div className="inner">load more</div>
             </button>
         </div>
