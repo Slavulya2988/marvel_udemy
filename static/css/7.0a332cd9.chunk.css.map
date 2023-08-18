@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/components/errorMessage/errorMessage.scss"],"names":[],"mappings":"AAAA,OACI,aAAA,CACA,WAAA,CACA,YAAA,CACA,kBAAA,CACA,aAAA","file":"7.0a332cd9.chunk.css","sourcesContent":[".error{\r\n    display: block;\r\n    width: 250px;\r\n    height: 250px;\r\n    object-fit: contain;\r\n    margin: 0 auto;\r\n}\r\n"]}
